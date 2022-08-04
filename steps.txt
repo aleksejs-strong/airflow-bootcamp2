@@ -1,0 +1,35 @@
+sudo apt-get update
+
+sudo apt install python3-pip
+sudo pip3 install virtualenv
+
+mkdir airflow_workspace
+mkdir airflow_workspace/airflow
+mkdir airflow_workspace/dags
+
+cd airflow_workspace
+virtualenv venv
+source venv/bin/activate
+
+export AIRFLOW_HOME=~/airflow_workspace/airflow
+export AIRFLOW__CORE__DAGS_FOLDER=/home/ubuntu/airflow_workspace/dags
+export AIRFLOW__CORE__LOAD_EXAMPLES=False
+export AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=60
+
+pip3 install apache-airflow[gcp,sentry,statsd]
+pip3 install pyspark
+
+cd airflow
+
+
+airflow db init
+
+airflow users create --username student --password airflow --firstname student --lastname student --role Admin --email ""
+
+irflow db reset
+
+airflow scheduler -D
+airflow webserver -D
+
+# JAVA:
+sudo apt install openjdk-18-jdk
